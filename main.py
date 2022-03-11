@@ -49,7 +49,8 @@ def load_user(user_id):
 
 @app.route("/", methods=["GET", "POST"])
 def login():
-    return render_template("login.html")
+    form = LoginForm()
+    return render_template("login.html", form=form)
 
 
 @app.route("/register", methods=["GET", "POST"])
