@@ -1,4 +1,6 @@
 # imports
+import uuid
+
 import sqlalchemy as sqlalchemy
 from flask import Flask, render_template, redirect, url_for, flash, request
 from flask_bootstrap import Bootstrap
@@ -14,6 +16,7 @@ from forms import AddBugForm, RegisterForm, LoginForm, CommentForm
 from flask_gravatar import Gravatar
 from functools import wraps
 from flask import abort
+from itsdangerous import URLSafeTimedSerializer
 import os
 
 # Initialising app
@@ -27,6 +30,7 @@ Bootstrap(app)
 login_manager = LoginManager()
 login_manager.init_app(app)
 ckeditor = CKEditor(app)
+ts = URLSafeTimedSerializer(app.config["SECRET_KEY"])
 
 # Connect to Database
 
@@ -159,7 +163,8 @@ def register():
 
 @app.route("/dashboard", methods=["GET", "POST"])
 def dashboard():
-    return render_template("dashboard.html")
+    return render_template("template.html")
+
 
 if __name__ == "__main__":
     app.run(debug=True)
