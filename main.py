@@ -68,6 +68,9 @@ class Bugs(db.Model):
     submitter_id = Column(Integer, ForeignKey("users.id"))
     submitter = relationship("Users", back_populates="bugs")
 
+    # relationship with Comment table
+    comments = relationship("Comment", back_populates="bug")
+
 
 class Comment(db.Model):
     __tablename__ = "comments"
@@ -78,9 +81,13 @@ class Comment(db.Model):
     commenter_id = Column(Integer, ForeignKey("users.id"))
     commenter = relationship("Users", back_populates="comments")
 
+    # relationship with Bugs table
+    bug_id = Column(Integer, ForeignKey("bugs.id"))
+    bug = relationship("Bugs", back_populates="comments")
+
 
 # Create tables in db
-# db.create_all()
+db.create_all()
 
 
 # user_loader callback
