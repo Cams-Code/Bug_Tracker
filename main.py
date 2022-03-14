@@ -87,7 +87,7 @@ class Comment(db.Model):
 
 
 # Create tables in db
-db.create_all()
+# db.create_all()
 
 
 # user_loader callback
@@ -102,6 +102,24 @@ def load_user(user_id):
 @app.route("/", methods=["GET", "POST"])
 def login():
     form = LoginForm()
+    if request.method == "POST":
+        email = form.email.data
+        password = form.password.data
+        user = Users.query.filter_by(email=email).first()
+
+        # check login credentials
+        try:
+            check_password_hash(user.password, password)
+        except AttributeError:
+            flash("That email does not exist, please try again.")
+            return redirect(url_for("login"))
+        else:
+            if check_password_hash(user.password, password):
+                login_user(user)
+                return redirect(url_for("dashboard"))
+            else:
+                flash("Incorrect password, please try again.")
+                return redirect(url_for("login"))
     return render_template("login.html", form=form)
 
 
@@ -109,9 +127,39 @@ def login():
 def register():
     form = RegisterForm()
     if form.validate_on_submit():
-        pass
+        # Check for duplicated email
+        user_name = form.name.data
+        user_password = form.password.data
+        user_email = form.email.data
+        if Users.query.filter_by(email=user_email).first():
+
+            # Flash message saying duplicated email
+            flash("That email already exists, try login instead.")
+            return redirect(url_for("login"))
+        else:
+            # add new user
+
+            new_user = Users(
+                full_name=user_name,
+                password=generate_password_hash(user_password, method="pbkdf2:sha256", salt_length=8),
+                email=user_email,
+            )
+
+            db.session.add(new_user)
+            db.session.commit()
+
+            # sign in when registered
+            user = Users.query.filter_by(email=user_email).first()
+            login_user(user)
+
+            return redirect(url_for("dashboard"))
+
     return render_template("register.html", form=form)
 
+
+@app.route("/dashboard", methods=["GET", "POST"])
+def dashboard():
+    return render_template("dashboard.html")
 
 if __name__ == "__main__":
     app.run(debug=True)

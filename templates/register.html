@@ -13,7 +13,7 @@
 	<link href="../static/css/style_home.css" rel="stylesheet">
 
 	</head>
-	<body style="background-image: url(../static/images/full_bg.jpg); background-size: cover;" >
+	<body style="background-image: url(../static/images/home_bg.jpg); background-size: cover;" >
 	<section class="ftco-section">
 		<div class="container">
 			<div class="row justify-content-center">
@@ -27,33 +27,29 @@
 		      			<div class="img d-flex align-items-center justify-content-center" style="background-image: url(../static/images/logo.jpg);"></div>
 		      			<h3 class="text-center mb-0">Welcome</h3>
 		      			<p class="text-center">Sign up by entering the information below</p>
-							<form action="#" class="login-form">
-		      				<div class="form-group">
-		      					<div class="icon d-flex align-items-center justify-content-center"><span class="fa fa-user"></span></div>
-									{{ form.name }}
-								</div>
+						<form method="post" class="login-form" action="/register">
+							<div class="form-group">
+								<div class="icon d-flex align-items-center justify-content-center"><span class="fa fa-user"></span></div>
+										{{ form.hidden_tag() }}
+										{{ form.name }}
+							</div>
 							<div class="form-group">
 								<div class="icon d-flex align-items-center justify-content-center"><span class="fa fa-envelope"></span></div>
-								{{ form.email }}
+									{{ form.email }}
 							</div>
-	            			<div class="form-group">
-	            				<div class="icon d-flex align-items-center justify-content-center"><span class="fa fa-lock"></span></div>
-								{{ form.password }}
-	            			</div>
-
-	            		<div class="form-group d-md-flex">
-								<div class="w-100 text-md-right">
-								</div>
-	            	</div>
-	            <div class="form-group">
-	            	{{ form.submit }}
-	            </div>
-	          </form>
-	          <div class="w-100 text-center mt-4 text">
-	          	<p class="mb-0">Already have an account?</p>
-		          <a href="{{url_for('login')}}">Sign In</a>
-	          </div>
-	        </div>
+							<div class="form-group">
+								<div class="icon d-flex align-items-center justify-content-center"><span class="fa fa-lock"></span></div>
+									{{ form.password }}
+							</div>
+							<div class="form-group">
+								<button type="submit" class="btn form-control btn-primary rounded submit px-3">Register</button>
+							</div>
+							<div class="w-100 text-center mt-4 text">
+								<p class="mb-0">Already have an account?</p>
+								<a href="{{url_for('login')}}">Sign In</a>
+							</div>
+						</form>
+	        		</div>
 				</div>
 			</div>
 		</div>
