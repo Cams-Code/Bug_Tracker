@@ -2,7 +2,7 @@
 import uuid
 
 import sqlalchemy as sqlalchemy
-from flask import Flask, render_template, redirect, url_for, flash, request
+from flask import Flask, render_template, redirect, url_for, flash, request, session
 from flask_bootstrap import Bootstrap
 from flask_ckeditor import CKEditor
 from datetime import date
@@ -132,6 +132,7 @@ def login():
         else:
             if check_password_hash(user.password, password):
                 login_user(user)
+                session.permanent = False
                 return redirect(url_for("dashboard"))
             else:
                 flash("Incorrect password, please try again.")
@@ -139,7 +140,10 @@ def login():
     return render_template("login.html", form=form)
 
 
-
+@app.route("/logout", methods=["GET", "POST"])
+def logout():
+    logout_user()
+    return redirect(url_for("login"))
 
 
 @app.route("/register", methods=["GET", "POST"])
