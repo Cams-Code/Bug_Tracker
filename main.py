@@ -112,7 +112,6 @@ def admin_only(f):
     return decorated_function
 
 
-
 # View pages
 
 
@@ -140,6 +139,9 @@ def login():
     return render_template("login.html", form=form)
 
 
+
+
+
 @app.route("/register", methods=["GET", "POST"])
 def register():
     form = RegisterForm()
@@ -160,6 +162,7 @@ def register():
                 full_name=user_name,
                 password=generate_password_hash(user_password, method="pbkdf2:sha256", salt_length=8),
                 email=user_email,
+                role="no role"
             )
 
             db.session.add(new_user)
