@@ -97,7 +97,20 @@ class Comment(db.Model):
 # user_loader callback
 @login_manager.user_loader
 def load_user(user_id):
-    return
+    return Users.query.get(int(user_id))
+
+
+# admin only function
+def admin_only(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        if current_user.role == "admin":
+            return f(*args, **kwargs)
+        else:
+            return abort(403)
+
+    return decorated_function
+
 
 
 # View pages
@@ -161,9 +174,54 @@ def register():
     return render_template("register.html", form=form)
 
 
+@app.route("/template", methods=["GET", "POST"])
+def template():
+    return render_template("border_template.html")
+
+
 @app.route("/dashboard", methods=["GET", "POST"])
+@login_required
 def dashboard():
-    return render_template("template.html")
+    return render_template("dashboard.html")
+
+
+@app.route("/all_projects", methods=["GET", "POST"])
+@login_required
+def all_projects():
+    return render_template("all_projects.html")
+
+
+@app.route("/personal_projects", methods=["GET", "POST"])
+@login_required
+def personal_projects():
+    return render_template("personal_projects.html")
+
+
+@app.route("/manage_projects", methods=["GET", "POST"])
+@login_required
+@admin_only
+def manage_projects():
+    return render_template("manage_projects.html")
+
+
+@app.route("/assign_projects", methods=["GET", "POST"])
+@login_required
+@admin_only
+def assign_projects():
+    return render_template("assign_projects.html")
+
+
+@app.route("/all_users", methods=["GET", "POST"])
+@login_required
+def all_users():
+    return render_template("users.html")
+
+
+@app.route("/manage_users", methods=["GET", "POST"])
+@login_required
+@admin_only
+def manage_users():
+    return render_template("manage_users.html")
 
 
 if __name__ == "__main__":
