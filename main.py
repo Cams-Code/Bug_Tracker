@@ -61,12 +61,11 @@ class Bugs(db.Model):
     id = Column(Integer, primary_key=True)
     bug_name = Column(String(250), nullable=False)
     brief_desc = Column(String(250), nullable=False)
-    full_desc = Column(Text(1000), nullable=False)
-    time = Column(Integer, nullable=True)
-    severity = Column(Integer, nullable=True)
+    full_desc = Column(Text, nullable=False)
+    time_to_fix = Column(Integer, nullable=False)
+    severity = Column(Integer, nullable=False)
     priority = Column(Integer, nullable=False)
-    date = Column(String(250), nullable=False)
-    img = Column(String, nullable=True)
+    status = Column(String(250), nullable=False)
 
     # relationship with Users table
     submitter_id = Column(Integer, ForeignKey("users.id"))
@@ -91,7 +90,7 @@ class Comment(db.Model):
 
 
 # Create tables in db
-# db.create_all()
+db.create_all()
 
 
 # user_loader callback
@@ -181,15 +180,36 @@ def register():
     return render_template("register.html", form=form)
 
 
-@app.route("/template", methods=["GET", "POST"])
-def template():
-    return render_template("border_template.html")
-
-
 @app.route("/dashboard", methods=["GET", "POST"])
 @login_required
 def dashboard():
     return render_template("dashboard.html")
+
+
+@app.route("/add_bug", methods=["GET", "POST"])
+@login_required
+def add_bug():
+    form = AddBugForm()
+    if form.validate_on_submit():
+
+        # add new bug to database
+        new_bug = Bugs(
+            bug_name=form.bug_name.data,
+            brief_desc=form.brief_desc.data,
+            full_desc=form.full_desc.data,
+            time_to_fix=int(form.time_to_fix.data),
+            severity=int(form.severity.data),
+            priority=(int(form.time_to_fix.data) + int(form.severity.data))/2,
+            submitter_id=current_user.id,
+            status="Not Started"
+        )
+
+        db.session.add(new_bug)
+        db.session.commit()
+
+        return redirect(url_for("all_projects"))
+
+    return render_template("add_bug.html", form=form)
 
 
 @app.route("/all_projects", methods=["GET", "POST"])
@@ -204,10 +224,10 @@ def personal_projects():
     return render_template("personal_projects.html")
 
 
-@app.route("/manage_projects", methods=["GET", "POST"])
+@app.route("/edit_projects", methods=["GET", "POST"])
 @login_required
 @admin_only
-def manage_projects():
+def edit_projects():
     return render_template("manage_projects.html")
 
 
