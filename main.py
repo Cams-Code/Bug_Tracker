@@ -62,7 +62,6 @@ class Bugs(db.Model):
     brief_desc = Column(String(250), nullable=False)
     full_desc = Column(Text, nullable=False)
     time_to_fix = Column(Integer, nullable=False)
-    severity = Column(Integer, nullable=False)
     priority = Column(Integer, nullable=False)
     status = Column(String(250), nullable=False)
 
@@ -89,7 +88,7 @@ class Comment(db.Model):
 
 
 # Create tables in db
-db.create_all()
+# db.create_all()
 
 
 # user_loader callback
@@ -197,8 +196,7 @@ def add_bug():
             brief_desc=form.brief_desc.data,
             full_desc=form.full_desc.data,
             time_to_fix=int(form.time_to_fix.data),
-            severity=int(form.severity.data),
-            priority=(int(form.time_to_fix.data) + int(form.severity.data))/2,
+            priority=form.priority.data,
             submitter_id=current_user.id,
             status="Not Started"
         )
@@ -231,11 +229,11 @@ def edit_projects():
     return render_template("manage_projects.html")
 
 
-@app.route("/assign_projects", methods=["GET", "POST"])
+@app.route("/view_projects/<int:project_id>", methods=["GET", "POST"])
 @login_required
-@admin_only
-def assign_projects():
-    return render_template("assign_projects.html")
+def view_projects(project_id):
+    project = Bugs.query.get(project_id)
+    return render_template("full_project_view.html", project=project)
 
 
 @app.route("/all_users", methods=["GET", "POST"])

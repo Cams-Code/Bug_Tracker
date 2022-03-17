@@ -13,8 +13,8 @@ class AddBugForm(FlaskForm):
     full_desc = CKEditorField("Full Description", validators=[DataRequired()])
 
     choices = (1, 2, 3, 4, 5, 6, 7, 8, 9, 10)
-    severity = SelectField("Severity (10 being very severe)", choices=choices, validators=[DataRequired()])
-    time_to_fix = SelectField("Estimated Time to fix (10 being very quick)", choices=choices, validators=[DataRequired()])
+    priority = SelectField("Priority (10 being very urgent)", choices=choices, validators=[DataRequired()])
+    time_to_fix = SelectField("Estimated Time to fix (10 being very long)", choices=choices, validators=[DataRequired()])
     submit = SubmitField("Submit", render_kw={"class": "d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm fas fa-sm text-white-50", "style": "width:100%;"})
 
 

@@ -14,7 +14,7 @@
                     <div class="row">
 
                         <!-- Area Chart -->
-                        <div class="col-xl-12 col-lg-7">
+                        <div class="col-xl-12">
                             <div class="card shadow mb-4">
                                 <div
                                     class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
@@ -28,10 +28,10 @@
                                                 <th>Project Name</th>
                                                 <th>Brief Description</th>
                                                 <th>Submitted By</th>
-                                                <th>Severity</th>
                                                 <th>Time to Complete</th>
                                                 <th>Priority</th>
                                                 <th>Assigned Users</th>
+                                                <th>Status</th>
                                                 <th>Full View</th>
                                             </tr>
                                             {% for project in projects %}
@@ -39,11 +39,14 @@
                                                     <td>{{ project.bug_name.capitalize() }}</td>
                                                     <td>{{ project.brief_desc }}</td>
                                                     <td>{{ project.submitter.full_name.title() }}</td>
-                                                    <td>{{ project.severity }}</td>
                                                     <td>{{ project.time_to_fix }}</td>
                                                     <td>{{ project.priority }}</td>
                                                     <td>users</td>
-                                                    <td> Boop </td>
+                                                    <td>{{ project.status }}</td>
+                                                    <td>
+                                                        <a href="{{ url_for('view_projects', project_id=project.id) }}" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm">
+                                                            <i class="fas fa-sm text-white-50"></i> View Project</a>
+                                                    </td>
                                                 </tr>
                                             {% endfor %}
                                         </table>

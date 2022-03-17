@@ -63,15 +63,6 @@
                     <span>All Projects</span></a>
             </li>
 
-            <!-- Nav Item - Assign Projects -->
-            {% if current_user.role == "admin" %}
-                <li class="nav-item">
-                    <a class="nav-link" href="{{ url_for('assign_projects') }}">
-                        <i class="fas fa-fw fa-table"></i>
-                        <span>Assign Projects</span></a>
-                </li>
-            {% endif %}
-
             <!-- Nav Item - My Projects -->
             <li class="nav-item">
                 <a class="nav-link" href="{{ url_for('personal_projects') }}">
