@@ -8,14 +8,14 @@ from flask_ckeditor import CKEditorField
 
 # WTForm linked to Bug database
 class AddBugForm(FlaskForm):
-    bug_name = StringField("Bug Name", validators=[DataRequired()])
+    bug_name = StringField("Project Name", validators=[DataRequired()])
     brief_desc = StringField("Brief Description", validators=[DataRequired()])
     full_desc = CKEditorField("Full Description", validators=[DataRequired()])
 
     choices = (1, 2, 3, 4, 5, 6, 7, 8, 9, 10)
     severity = SelectField("Severity (10 being very severe)", choices=choices, validators=[DataRequired()])
     time_to_fix = SelectField("Estimated Time to fix (10 being very quick)", choices=choices, validators=[DataRequired()])
-    submit = SubmitField("Submit", render_kw={"class": "d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm fas fa-download fa-sm text-white-50"})
+    submit = SubmitField("Submit", render_kw={"class": "d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm fas fa-sm text-white-50", "style": "width:100%;"})
 
 
 # WTForm linked to User database

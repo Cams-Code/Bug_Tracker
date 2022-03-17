@@ -1,5 +1,4 @@
 # imports
-import uuid
 
 import sqlalchemy as sqlalchemy
 from flask import Flask, render_template, redirect, url_for, flash, request, session
@@ -209,13 +208,14 @@ def add_bug():
 
         return redirect(url_for("all_projects"))
 
-    return render_template("add_bug.html", form=form)
+    return render_template("add_project.html", form=form)
 
 
 @app.route("/all_projects", methods=["GET", "POST"])
 @login_required
 def all_projects():
-    return render_template("all_projects.html")
+    projects = Bugs.query.all()
+    return render_template("all_projects.html", projects=projects)
 
 
 @app.route("/personal_projects", methods=["GET", "POST"])

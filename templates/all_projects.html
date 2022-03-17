@@ -1,3 +1,60 @@
-{% extends "body_template.html" %}
+{% extends "border_template.html" %}
+{% block main %}
+                <div class="container-fluid">
 
-{% block title %} All Projects {% endblock %}
+                    <!-- Page Heading -->
+                    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+                        <h1 class="h3 mb-0 text-gray-800">{% block title %} All Projects {% endblock %}</h1>
+                        <a href="{{ url_for('add_bug') }}" class="d-none d-sm-inline-block btn btn-med btn-primary shadow-sm"><i
+                                class="fas fa-sm text-white-50"></i> Add Project</a>
+                    </div>
+
+                    <!-- Content Row -->
+
+                    <div class="row">
+
+                        <!-- Area Chart -->
+                        <div class="col-xl-12 col-lg-7">
+                            <div class="card shadow mb-4">
+                                <div
+                                    class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                                    <h6 class="m-0 font-weight-bold text-primary">Projects</h6>
+                                </div>
+                                <!-- Card Body -->
+                                <div class="card-body">
+                                    <div class="chart-area">
+                                        <table class="table table-striped" style="width: 100%;">
+                                            <tr>
+                                                <th>Project Name</th>
+                                                <th>Brief Description</th>
+                                                <th>Submitted By</th>
+                                                <th>Severity</th>
+                                                <th>Time to Complete</th>
+                                                <th>Priority</th>
+                                                <th>Related Users</th>
+                                                <th>Full View</th>
+                                            </tr>
+                                            {% for project in projects %}
+                                                <tr>
+                                                    <td>{{ project.bug_name }}</td>
+                                                    <td>{{ project.brief_desc }}</td>
+                                                    <td>{{ project.submitter.full_name }}</td>
+                                                    <td>{{ project.severity }}</td>
+                                                    <td>{{ project.time_to_fix }}</td>
+                                                    <td>{{ project.priority }}</td>
+                                                    <td>users</td>
+                                                    <td> Boop </td>
+                                                </tr>
+                                            {% endfor %}
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                        </div>
+                    </div>
+
+                </div>
+{% endblock %}
