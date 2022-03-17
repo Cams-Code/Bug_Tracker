@@ -31,14 +31,14 @@
                                                 <th>Severity</th>
                                                 <th>Time to Complete</th>
                                                 <th>Priority</th>
-                                                <th>Related Users</th>
+                                                <th>Assigned Users</th>
                                                 <th>Full View</th>
                                             </tr>
                                             {% for project in projects %}
                                                 <tr>
-                                                    <td>{{ project.bug_name }}</td>
+                                                    <td>{{ project.bug_name.capitalize() }}</td>
                                                     <td>{{ project.brief_desc }}</td>
-                                                    <td>{{ project.submitter.full_name }}</td>
+                                                    <td>{{ project.submitter.full_name.title() }}</td>
                                                     <td>{{ project.severity }}</td>
                                                     <td>{{ project.time_to_fix }}</td>
                                                     <td>{{ project.priority }}</td>

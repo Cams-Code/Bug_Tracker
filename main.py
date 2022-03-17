@@ -161,7 +161,7 @@ def register():
             # add new user
 
             new_user = Users(
-                full_name=user_name,
+                full_name=user_name.title(),
                 password=generate_password_hash(user_password, method="pbkdf2:sha256", salt_length=8),
                 email=user_email,
                 role="no role"
@@ -241,7 +241,8 @@ def assign_projects():
 @app.route("/all_users", methods=["GET", "POST"])
 @login_required
 def all_users():
-    return render_template("users.html")
+    users = Users.query.all()
+    return render_template("users.html", users=users)
 
 
 @app.route("/manage_users", methods=["GET", "POST"])
