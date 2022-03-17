@@ -5,6 +5,8 @@
                     <!-- Page Heading -->
                     <div class="d-sm-flex align-items-center justify-content-between mb-4">
                         <h1 class="h3 mb-0 text-gray-800">Full Project View</h1>
+                        <a href="{{ url_for('all_projects') }}" class="d-none d-sm-inline-block btn btn-med btn-primary shadow-sm"><i
+                                class="fas fa-sm text-white-50"></i>Go Back</a>
                     </div>
 
                     <!-- Content Row -->
@@ -12,44 +14,104 @@
                     <div class="row">
 
                         <!-- Area Chart -->
-                        <div class="col-xl-8 col-lg-7">
+                        <div class="col-5">
                             <div class="card shadow mb-4">
                                 <div
                                     class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
                                     <h6 class="m-0 font-weight-bold text-primary">Project Detail</h6>
-                                    <div class="dropdown no-arrow">
-                                    </div>
                                 </div>
                                 <!-- Card Body -->
                                 <div class="card-body">
                                     <div class="chart-area">
-                                        <canvas id="myAreaChart"></canvas>
+
+                                        <!-- First Row -->
+                                        <b>
+                                            <div class="row">
+                                                <div class="col-6">Project Title</div>
+                                                <div class="col-6">Submitted By</div>
+                                            </div>
+                                        </b>
+                                        <div class="row">
+                                            <h7 class="col-6">
+                                                {{ project.bug_name }}
+                                            </h7>
+                                            <h7 class="col-6">
+                                                {{ project.submitter.full_name.title() }}
+                                            </h7>
+                                        </div>
+                                        <hr>
+
+                                        <!-- Second Row -->
+                                        <b>
+                                            <div class="row">
+                                                <div class="col-12"> Full Description</div>
+                                            </div>
+                                        </b>
+                                        <div class="row">
+                                            <h7 class="col-12">{{ project.full_desc|safe }}</h7>
+                                        </div>
+                                        <hr>
+
+                                        <!-- Third Row -->
+                                        <b>
+                                            <div class="row">
+                                                <div class="col-6"> Time to Complete (10 being long)</div>
+                                                <div class="col-6"> Priority</div>
+                                            </div>
+                                        </b>
+                                        <div class="row">
+                                            <h7 class="col-6">{{ project.time_to_fix }}</h7>
+                                            <h7 class="col-6">{{ project.priority }}</h7>
+                                        </div>
+                                        <hr>
+
+                                        <!-- Fourth Row -->
+                                        <b>
+                                            <div class="row">
+                                                <div class="col-6">Assigned Users</div>
+                                                <div class="col-6">Current Status</div>
+                                            </div>
+                                        </b>
+                                        <div class="row">
+                                            <h7 class="col-6">Some Users</h7>
+                                            <h7 class="col-6">{{ project.status }}</h7>
+                                        </div>
+                                        <hr>
+
+                                        <!-- Fifth Row -->
+                                        <b>
+                                            <div class="row">
+                                                <div class="col-6">Created</div>
+                                                <div class="col-6">Last Updated</div>
+                                            </div>
+                                        </b>
+                                        <div class="row">
+                                            <h7 class="col-6">Yesterday</h7>
+                                            <h7 class="col-6">Today</h7>
+                                        </div>
+                                        <hr>
+
+                                        <!-- Buttons -->
+                                        <div class="row justify-content-between" style="padding: 0 0.5rem 0 0.5rem">
+                                            <a href="{{ url_for('all_projects') }}" class="col-3 d-none d-sm-inline-block btn btn-med btn-primary shadow-sm"><i
+                                            class="fas fa-sm text-white-50"></i>Update status</a>
+
+                                            <a href="{{ url_for('all_projects') }}" class="col-3 d-none d-sm-inline-block btn btn-med btn-primary shadow-sm"><i
+                                            class="fas fa-sm text-white-50"></i>Edit Project</a>
+
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
 
                         <!-- Pie Chart -->
-                        <div class="col-xl-4 col-lg-5">
+                        <div class="col-7">
                             <div class="card shadow mb-4">
                                 <!-- Card Header - Dropdown -->
                                 <div
                                     class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                                    <h6 class="m-0 font-weight-bold text-primary">R</h6>
-                                    <div class="dropdown no-arrow">
-                                        <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
-                                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                            <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
-                                        </a>
-                                        <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in"
-                                            aria-labelledby="dropdownMenuLink">
-                                            <div class="dropdown-header">Dropdown Header:</div>
-                                            <a class="dropdown-item" href="#">Action</a>
-                                            <a class="dropdown-item" href="#">Another action</a>
-                                            <div class="dropdown-divider"></div>
-                                            <a class="dropdown-item" href="#">Something else here</a>
-                                        </div>
-                                    </div>
+                                    <h6 class="m-0 font-weight-bold text-primary">Comments</h6>
                                 </div>
                                 <!-- Card Body -->
                                 <div class="card-body">
@@ -81,7 +143,7 @@
                             <!-- Project Card Example -->
                             <div class="card shadow mb-4">
                                 <div class="card-header py-3">
-                                    <h6 class="m-0 font-weight-bold text-primary">Projects</h6>
+                                    <h6 class="m-0 font-weight-bold text-primary">Assigned Users</h6>
                                 </div>
                                 <div class="card-body">
                                     <h4 class="small font-weight-bold">Server Migration <span
