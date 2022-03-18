@@ -35,5 +35,5 @@ class LoginForm(FlaskForm):
 
 # WTForm linked to Comments database
 class CommentForm(FlaskForm):
-    comment = CKEditorField("Comment", validators=[DataRequired()])
-    submit = SubmitField("Submit Comment")
+    comment = TextField("", validators=[DataRequired()], render_kw={"placeholder": "Add a new Comment", "class": "form-control"})
+    submit = SubmitField("Submit", render_kw={"style": "transform: translate(0px, 4px)"})

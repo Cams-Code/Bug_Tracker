@@ -233,7 +233,20 @@ def edit_projects():
 @login_required
 def view_projects(project_id):
     project = Bugs.query.get(project_id)
-    return render_template("full_project_view.html", project=project)
+    form = CommentForm()
+    if form.validate_on_submit():
+        comment = form.comment.data
+        new_comment = Comment(
+            text=comment,
+            commenter_id=current_user.id,
+            bug_id=project.id,
+        )
+
+        db.session.add(new_comment)
+        db.session.commit()
+        return redirect(url_for("view_projects", project_id=project_id))
+
+    return render_template("full_project_view.html", project=project, form=form)
 
 
 @app.route("/all_users", methods=["GET", "POST"])
