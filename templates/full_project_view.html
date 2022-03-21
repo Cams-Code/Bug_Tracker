@@ -97,8 +97,10 @@
                                         <div class="row justify-content-between" style="padding: 0 0.5rem 0 0.5rem">
                                             <a href="{{ url_for('all_projects') }}" data-toggle="modal" data-target="#statusModal" class="col-3 d-none d-sm-inline-block btn btn-med btn-primary shadow-sm"><i
                                             class="fas fa-sm text-white-50"></i>Update status</a>
-                                                <a href="{{ url_for('all_projects') }}" class="col-3 d-none d-sm-inline-block btn btn-med btn-primary shadow-sm"><i
+                                            {% if current_user.role == "admin" %}
+                                                <a href="{{ url_for('edit_projects', project_id=project.id) }}" class="col-3 d-none d-sm-inline-block btn btn-med btn-primary shadow-sm"><i
                                                 class="fas fa-sm text-white-50"></i>Edit Project</a>
+                                            {% endif %}
                                         </div>
                                     </div>
                                 </div>

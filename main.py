@@ -206,7 +206,7 @@ def add_bug():
 
         return redirect(url_for("all_projects"))
 
-    return render_template("add_project.html", form=form)
+    return render_template("add_project.html", form=form, delete=False)
 
 
 @app.route("/all_projects", methods=["GET", "POST"])
@@ -222,11 +222,29 @@ def personal_projects():
     return render_template("personal_projects.html")
 
 
-@app.route("/edit_projects", methods=["GET", "POST"])
+@app.route("/edit_projects/<int:project_id>", methods=["GET", "POST"])
 @login_required
 @admin_only
-def edit_projects():
-    return render_template("manage_projects.html")
+def edit_projects(project_id):
+    project = Bugs.query.get(project_id)
+    form = AddBugForm(
+        bug_name=project.bug_name,
+        brief_desc=project.brief_desc,
+        full_desc=project.full_desc,
+        priority=project.priority,
+        time_to_fix=project.time_to_fix
+    )
+
+    if form.validate_on_submit():
+        project.bug_name = form.bug_name.data
+        project.brief_desc = form.brief_desc.data
+        project.full_desc = form.full_desc.data
+        project.priority = form.priority.data
+        project.time_to_fix = form.time_to_fix.data
+        db.session.commit()
+        return redirect(url_for("view_projects", project_id=project.id))
+
+    return render_template("add_project.html", form=form, delete=True, project=project)
 
 
 @app.route("/view_projects/<int:project_id>", methods=["GET", "POST"])
@@ -258,6 +276,16 @@ def view_projects(project_id):
         return redirect(url_for("view_projects", project_id=project_id))
 
     return render_template("full_project_view.html", project=project, form=form, status=status_form)
+
+
+@app.route("/delete_project/<int:project_id>", methods=["GET", "POST"])
+@login_required
+@admin_only
+def delete_project(project_id):
+    project_to_delete = Bugs.query.get(project_id)
+    db.session.delete(project_to_delete)
+    db.session.commit()
+    return redirect(url_for("all_projects"))
 
 
 @app.route("/all_users", methods=["GET", "POST"])
