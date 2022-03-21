@@ -37,3 +37,10 @@ class LoginForm(FlaskForm):
 class CommentForm(FlaskForm):
     comment = TextField("", validators=[DataRequired()], render_kw={"placeholder": "Add a new Comment", "class": "form-control"})
     submit = SubmitField("Submit", render_kw={"style": "transform: translate(0px, 4px)"})
+
+
+# WTForm linked to changing Project status
+class StatusForm(FlaskForm):
+    choices = ("Not Started", "In Progress", "To Review", "Completed")
+    status = SelectField("", choices=choices, validators=[DataRequired()])
+    status_submit = SubmitField("Update", render_kw={"class": "btn btn-primary"})

@@ -9676,3 +9676,41 @@ a:focus {
 .sidebar-dark.toggled #sidebarToggle::after {
   color: rgba(255, 255, 255, 0.5);
 }
+
+.view-project {
+    grid-template-areas:
+        "title title"
+        "detail comments"
+        "detail new"
+        "users new"
+}
+
+.title {
+    grid-area: title;
+    grid-row-start: title;
+    grid-row-end: title;
+}
+
+.detail {
+    grid-area: detail;
+    grid-row-start: comments;
+    grid-row-end: new;
+}
+
+.comments {
+    grid-area: comments;
+    grid-row-start: detail;
+    grid-row-end: detail;
+}
+
+.new {
+    grid-area: new;
+    grid-row-start: detail;
+    grid-row-end: users;
+}
+
+.users {
+    grid-area: users;
+    grid-row-start: new;
+    grid-row-start: new;
+}

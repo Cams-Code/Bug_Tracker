@@ -11,7 +11,7 @@ from sqlalchemy.orm import relationship
 from sqlalchemy import Column, Integer, ForeignKey, String, Text
 from sqlalchemy.ext.declarative import declarative_base
 from flask_login import UserMixin, login_user, LoginManager, login_required, current_user, logout_user
-from forms import AddBugForm, RegisterForm, LoginForm, CommentForm
+from forms import AddBugForm, RegisterForm, LoginForm, CommentForm, StatusForm
 from flask_gravatar import Gravatar
 from functools import wraps
 from flask import abort
@@ -234,7 +234,10 @@ def edit_projects():
 def view_projects(project_id):
     project = Bugs.query.get(project_id)
     form = CommentForm()
-    if form.validate_on_submit():
+    status_form = StatusForm()
+
+    # add comment
+    if form.validate_on_submit() and form.comment.data:
         comment = form.comment.data
         new_comment = Comment(
             text=comment,
@@ -246,7 +249,15 @@ def view_projects(project_id):
         db.session.commit()
         return redirect(url_for("view_projects", project_id=project_id))
 
-    return render_template("full_project_view.html", project=project, form=form)
+    # update status
+    elif request.method == "POST" and status_form.status.data:
+        new_status = status_form.status.data
+        project_to_update = Bugs.query.get(project_id)
+        project_to_update.status = new_status
+        db.session.commit()
+        return redirect(url_for("view_projects", project_id=project_id))
+
+    return render_template("full_project_view.html", project=project, form=form, status=status_form)
 
 
 @app.route("/all_users", methods=["GET", "POST"])
