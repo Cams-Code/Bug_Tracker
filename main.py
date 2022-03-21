@@ -299,7 +299,8 @@ def all_users():
 @login_required
 @admin_only
 def manage_users():
-    return render_template("manage_users.html")
+    project = Bugs.query.get(1)
+    return render_template("manage_users.html", project=project)
 
 
 if __name__ == "__main__":

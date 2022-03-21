@@ -5,7 +5,11 @@
 
                     <!-- Page Heading -->
                     <div class="d-sm-flex align-items-center justify-content-between mb-4">
-                        <h1 class="h3 mb-0 text-gray-800">Add Project</h1>
+                        {% if delete %}
+                            <h1 class="h3 mb-0 text-gray-800">Edit Project</h1>
+                        {% else %}
+                            <h1 class="h3 mb-0 text-gray-800">Add Project</h1>
+                        {% endif %}
                         {% if delete %}
                             <a href="{{ url_for('delete_project', project_id=project.id) }}" data-toggle="modal" data-target="#deleteModal" class="d-none d-sm-inline-block btn btn-med btn-primary shadow-sm"><i
                             class="fas fa-sm text-white-50"></i> Delete Project</a>
