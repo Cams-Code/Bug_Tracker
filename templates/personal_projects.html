@@ -1,3 +1,83 @@
-{% extends "body_template.html" %}
+{% extends "border_template.html" %}
+{% block main %}
+                <div class="container-fluid">
 
-{% block title %} Personal Projects {% endblock %}
+                    <!-- Page Heading -->
+                    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+                        <h1 class="h3 mb-0 text-gray-800">{% block title %} Personal Projects {% endblock %}</h1>
+                    </div>
+
+                    <!-- Content Row -->
+
+                    <div class="row">
+
+                        <!-- Area Chart -->
+                        <div class="col-xl-12">
+                            <div class="card shadow mb-4">
+                                <div
+                                    class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                                    <h6 class="m-0 font-weight-bold text-primary">Projects</h6>
+                                </div>
+                                <!-- Card Body -->
+                                <div class="card-body">
+                                    <div class="chart-area">
+                                        <table id="project-data" class="table table-striped" style="width: 100%;">
+                                            <thead>
+                                                <tr>
+                                                    <th>Project Name</th>
+                                                    <th>Brief Description</th>
+                                                    <th>Submitted By</th>
+                                                    <th>Time to Complete</th>
+                                                    <th>Priority</th>
+                                                    <th>Assigned Users</th>
+                                                    <th>Status</th>
+                                                    <th>Full View</th>
+                                                </tr>
+                                            </thead>
+
+                                            {% for project in projects %}
+                                                {% for item in project.assigned %}
+                                                    {% if item.id == current_user.id %}
+                                                        <tr>
+                                                            <td>{{ project.bug_name.capitalize() }}</td>
+                                                            <td>{{ project.brief_desc }}</td>
+                                                            <td>{{ project.assigned[0].full_name }}</td>
+                                                            <td>{{ project.time_to_fix }}</td>
+                                                            <td>{{ project.priority }}</td>
+                                                            <td>users</td>
+                                                            <td>{{ project.status }}</td>
+                                                            <td>
+                                                                <a href="{{ url_for('view_projects', project_id=project.id) }}" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm">
+                                                                    <i class="fas fa-sm text-white-50"></i> View Project</a>
+                                                            </td>
+                                                        </tr>
+                                                    {% endif %}
+                                                {% endfor %}
+                                            {% endfor %}
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                </div>
+                </div>
+{% endblock %}
+
+{% block scripts %}
+ <script>
+     $(document).ready(function () {
+        $('#project-data').DataTable({
+            columns: [
+                null,
+                {orderable: false, searchable: false},
+                {orderable: true, searchable: false},
+                {orderable: true, searchable: false},
+                {orderable: true, searchable: false},
+                {orderable: true, searchable: false},
+                {orderable: true, searchable: false},
+                {orderable: false, searchable: false},
+                ],
+        });
+     });
+ </script>
+{% endblock %}

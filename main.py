@@ -224,7 +224,8 @@ def all_projects():
 @app.route("/personal_projects", methods=["GET", "POST"])
 @login_required
 def personal_projects():
-    return render_template("personal_projects.html")
+    projects = Bugs.query.all()
+    return render_template("personal_projects.html", projects=projects)
 
 
 @app.route("/edit_projects/<int:project_id>", methods=["GET", "POST"])
