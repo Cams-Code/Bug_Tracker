@@ -23,17 +23,19 @@
                                 <!-- Card Body -->
                                 <div class="card-body">
                                     <div class="chart-area">
-                                        <table class="table table-striped" style="width: 100%;">
-                                            <tr>
-                                                <th>Project Name</th>
-                                                <th>Brief Description</th>
-                                                <th>Submitted By</th>
-                                                <th>Time to Complete</th>
-                                                <th>Priority</th>
-                                                <th>Assigned Users</th>
-                                                <th>Status</th>
-                                                <th>Full View</th>
-                                            </tr>
+                                        <table id="project-data" class="table table-striped" style="width: 100%;">
+                                            <thead>
+                                                <tr>
+                                                    <th>Project Name</th>
+                                                    <th>Brief Description</th>
+                                                    <th>Submitted By</th>
+                                                    <th>Time to Complete</th>
+                                                    <th>Priority</th>
+                                                    <th>Assigned Users</th>
+                                                    <th>Status</th>
+                                                    <th>Full View</th>
+                                                </tr>
+                                            </thead>
                                             {% for project in projects %}
                                                 <tr>
                                                     <td>{{ project.bug_name.capitalize() }}</td>
@@ -56,4 +58,23 @@
                         </div>
                 </div>
                 </div>
+{% endblock %}
+
+{% block scripts %}
+ <script>
+     $(document).ready(function () {
+        $('#project-data').DataTable({
+            columns: [
+                null,
+                {orderable: false, searchable: false},
+                {orderable: true, searchable: false},
+                {orderable: true, searchable: false},
+                {orderable: true, searchable: false},
+                {orderable: true, searchable: false},
+                {orderable: true, searchable: false},
+                {orderable: false, searchable: false},
+                ],
+        });
+     });
+ </script>
 {% endblock %}

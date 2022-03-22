@@ -21,13 +21,15 @@
                                 <!-- Card Body -->
                                 <div class="card-body">
                                     <div class="chart-area">
-                                        <table class="table table-striped" style="width: 100%;">
-                                            <tr>
-                                                <th>Full Name</th>
-                                                <th>Role</th>
-                                                <th>Email Address</th>
-                                                <th>View Profile</th>
-                                            </tr>
+                                        <table id="user-table" class="table table-striped" style="width: 100%;">
+                                            <thead>
+                                                <tr>
+                                                    <th>Full Name</th>
+                                                    <th>Role</th>
+                                                    <th>Email Address</th>
+                                                    <th>View Profile</th>
+                                                </tr>
+                                            </thead>
                                             {% for user in users %}
                                                 {% if user.id != 1 %}
                                                 <tr>
@@ -46,4 +48,18 @@
                     </div>
                 </div>
 
+{% endblock %}
+
+{% block scripts %}
+ <script>
+     $(document).ready(function () {
+        $('#user-table').DataTable({
+            columns: [
+                null,
+                null,
+                {orderable: false, searchable: false},
+                {orderable: false, searchable: false}],
+        });
+     });
+ </script>
 {% endblock %}

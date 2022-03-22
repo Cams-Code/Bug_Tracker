@@ -139,12 +139,14 @@
                                 </div>
                                 <!-- Card Body -->
                                 <div class="card-body">
-                                        <table class="table table-striped" style="width: 100%;">
-                                            <tr>
-                                                <th>Name</th>
-                                                <th>Role</th>
-                                                <th>Comment</th>
-                                            </tr>
+                                        <table id="comment-table" class="table table-striped" style="width: 100%;">
+                                            <thead>
+                                                <tr>
+                                                    <th>Name</th>
+                                                    <th>Role</th>
+                                                    <th>Comment</th>
+                                                </tr>
+                                            </thead>
                                             {% for comment in project.comments %}
                                                 <tr>
                                                     <td>{{ comment.commenter.full_name.title() }}</td>
@@ -206,4 +208,17 @@
         </div>
     </div>
 
+{% endblock %}
+
+{% block scripts %}
+ <script>
+     $(document).ready(function () {
+        $('#comment-table').DataTable({
+            columns: [
+                null,
+                {orderable: true, searchable: false},
+                {orderable: false, searchable: false}],
+        });
+     });
+ </script>
 {% endblock %}
