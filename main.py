@@ -11,7 +11,7 @@ from sqlalchemy.orm import relationship
 from sqlalchemy import Column, Integer, ForeignKey, String, Text
 from sqlalchemy.ext.declarative import declarative_base
 from flask_login import UserMixin, login_user, LoginManager, login_required, current_user, logout_user
-from forms import AddBugForm, RegisterForm, LoginForm, CommentForm, StatusForm
+from forms import AddBugForm, RegisterForm, LoginForm, CommentForm, StatusForm, ProjectAssignForm
 from flask_gravatar import Gravatar
 from functools import wraps
 from flask import abort
@@ -251,8 +251,11 @@ def edit_projects(project_id):
 @login_required
 def view_projects(project_id):
     project = Bugs.query.get(project_id)
+    user_list = Users.query.all()
     form = CommentForm()
     status_form = StatusForm()
+    assign_form = ProjectAssignForm()
+    assign_form.users.choices = [(user.full_name, user.full_name) for user in user_list]
 
     # add comment
     if form.validate_on_submit() and form.comment.data:
@@ -275,7 +278,9 @@ def view_projects(project_id):
         db.session.commit()
         return redirect(url_for("view_projects", project_id=project_id))
 
-    return render_template("full_project_view.html", project=project, form=form, status=status_form)
+    # assign users
+
+    return render_template("full_project_view.html", project=project, form=form, status=status_form, assign=assign_form)
 
 
 @app.route("/delete_project/<int:project_id>", methods=["GET", "POST"])

@@ -1,7 +1,7 @@
 # imports
 
 from flask_wtf import FlaskForm
-from wtforms import StringField, SubmitField, PasswordField, IntegerField, TextField, SelectField
+from wtforms import StringField, SubmitField, PasswordField, TextField, SelectField, SelectMultipleField
 from wtforms.validators import DataRequired, Email
 from flask_ckeditor import CKEditorField
 
@@ -44,3 +44,9 @@ class StatusForm(FlaskForm):
     choices = ("Not Started", "In Progress", "To Review", "Completed")
     status = SelectField("", choices=choices, validators=[DataRequired()])
     status_submit = SubmitField("Update", render_kw={"class": "btn btn-primary"})
+
+
+# WTForm linked to assigning users to projects
+class ProjectAssignForm(FlaskForm):
+    users = SelectMultipleField(choices="", validators=[DataRequired()])
+    assign_submit = SubmitField("Assign")
