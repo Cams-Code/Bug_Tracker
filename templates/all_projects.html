@@ -40,7 +40,7 @@
                                                 <tr>
                                                     <td>{{ project.bug_name.capitalize() }}</td>
                                                     <td>{{ project.brief_desc }}</td>
-                                                    <td>{{ project.submitter.full_name.title() }}</td>
+                                                    <td>{{ project.assigned[0].full_name }}</td>
                                                     <td>{{ project.time_to_fix }}</td>
                                                     <td>{{ project.priority }}</td>
                                                     <td>users</td>

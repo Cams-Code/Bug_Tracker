@@ -8,7 +8,7 @@ from datetime import date
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.orm import relationship
-from sqlalchemy import Column, Integer, ForeignKey, String, Text
+from sqlalchemy import Column, Integer, ForeignKey, String, Text, Table
 from sqlalchemy.ext.declarative import declarative_base
 from flask_login import UserMixin, login_user, LoginManager, login_required, current_user, logout_user
 from forms import AddBugForm, RegisterForm, LoginForm, CommentForm, StatusForm, ProjectAssignForm
@@ -30,6 +30,7 @@ login_manager = LoginManager()
 login_manager.init_app(app)
 ckeditor = CKEditor(app)
 ts = URLSafeTimedSerializer(app.config["SECRET_KEY"])
+Base = declarative_base()
 
 # Connect to Database
 
@@ -38,6 +39,13 @@ app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 db = SQLAlchemy(app)
 
 # Create database tables
+
+# Association table for many to many relationship between Users and Bugs table
+UsersBugs = db.Table(
+    "usersbugs",
+    db.Column("user_id", Integer, ForeignKey("users.id")),
+    db.Column("bug_id", Integer, ForeignKey("bugs.id"))
+)
 
 
 class Users(UserMixin, db.Model):
@@ -49,7 +57,7 @@ class Users(UserMixin, db.Model):
     role = Column(String(250), nullable=True)
 
     # relationship with Bugs table
-    bugs = relationship("Bugs", back_populates="submitter")
+    bugs = relationship("Bugs", secondary=UsersBugs, backref="assigned")
 
     # relationship with Comment table
     comments = relationship("Comment", back_populates="commenter")
@@ -64,10 +72,6 @@ class Bugs(db.Model):
     time_to_fix = Column(Integer, nullable=False)
     priority = Column(Integer, nullable=False)
     status = Column(String(250), nullable=False)
-
-    # relationship with Users table
-    submitter_id = Column(Integer, ForeignKey("users.id"))
-    submitter = relationship("Users", back_populates="bugs")
 
     # relationship with Comment table
     comments = relationship("Comment", back_populates="bug")
@@ -189,7 +193,6 @@ def dashboard():
 def add_bug():
     form = AddBugForm()
     if form.validate_on_submit():
-
         # add new bug to database
         new_bug = Bugs(
             bug_name=form.bug_name.data,
@@ -197,11 +200,13 @@ def add_bug():
             full_desc=form.full_desc.data,
             time_to_fix=int(form.time_to_fix.data),
             priority=form.priority.data,
-            submitter_id=current_user.id,
             status="Not Started"
         )
 
         db.session.add(new_bug)
+        db.session.commit()
+
+        current_user.bugs.append(new_bug)
         db.session.commit()
 
         return redirect(url_for("all_projects"))
@@ -279,6 +284,12 @@ def view_projects(project_id):
         return redirect(url_for("view_projects", project_id=project_id))
 
     # assign users
+    elif request.method == "POST" and assign_form.users.data:
+        for user in assign_form.users.data:
+            assigned_user = Users.query.filter_by(full_name=user).first()
+            assigned_user.bugs.append(project)
+            db.session.commit()
+        return redirect(url_for("view_projects", project_id=project_id))
 
     return render_template("full_project_view.html", project=project, form=form, status=status_form, assign=assign_form)
 

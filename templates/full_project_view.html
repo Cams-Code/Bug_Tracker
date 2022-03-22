@@ -38,7 +38,7 @@
                                                 {{ project.bug_name }}
                                             </h7>
                                             <h7 class="col-6">
-                                                {{ project.submitter.full_name.title() }}
+                                                {{ project.assigned[0].full_name.title() }}
                                             </h7>
                                         </div>
                                         <hr>
@@ -116,8 +116,23 @@
                                     <h6 class="m-0 font-weight-bold text-primary">Assigned Users</h6>
                                 </div>
                                 <div class="card-body">
-                                    <table>
-
+                                    <table id="assign-table" class="table table-striped" style="width: 100%;">
+                                        <thead>
+                                            <tr>
+                                                <th>Name</th>
+                                                <th>Role</th>
+                                                <th>Email Address</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {% for user in project.assigned[1:] %}
+                                                    <tr>
+                                                        <td>{{ user.full_name }}</td>
+                                                        <td>{{ user.role.title() }}</td>
+                                                        <td>{{ user.email }}</td>
+                                                    </tr>
+                                            {% endfor %}
+                                        </tbody>
                                     </table>
                                 </div>
                             </div>
@@ -214,6 +229,16 @@
  <script>
      $(document).ready(function () {
         $('#comment-table').DataTable({
+            columns: [
+                null,
+                {orderable: true, searchable: false},
+                {orderable: false, searchable: false}],
+        });
+     });
+ </script>
+ <script>
+     $(document).ready(function () {
+        $('#assign-table').DataTable({
             columns: [
                 null,
                 {orderable: true, searchable: false},
