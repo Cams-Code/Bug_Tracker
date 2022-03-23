@@ -97,7 +97,7 @@
                                         <div class="row justify-content-between" style="padding: 0 0.5rem 0 0.5rem">
                                             <a href="{{ url_for('all_projects') }}" data-toggle="modal" data-target="#statusModal" class="col-3 d-none d-sm-inline-block btn btn-med btn-primary shadow-sm"><i
                                             class="fas fa-sm text-white-50"></i>Update status</a>
-                                            {% if current_user.role == "admin" %}
+                                            {% if current_user.role == "Admin" %}
                                                 <a href="{{ url_for('edit_projects', project_id=project.id) }}" class="col-3 d-none d-sm-inline-block btn btn-med btn-primary shadow-sm"><i
                                                 class="fas fa-sm text-white-50"></i>Edit Project</a>
                                             {% endif %}
@@ -125,7 +125,7 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            {% for user in project.assigned[1:] %}
+                                            {% for user in project.assigned %}
                                                     <tr>
                                                         <td>{{ user.full_name }}</td>
                                                         <td>{{ user.role.title() }}</td>
@@ -181,14 +181,25 @@
                             <!-- Add new Users -->
                             <div class="card shadow mb-4">
                                 <div class="card-header py-3">
-                                    <h6 class="m-0 font-weight-bold text-primary">Assign Additional Users</h6>
+                                    <h6 class="m-0 font-weight-bold text-primary">Manage Users</h6>
                                 </div>
                                 <div class="card-body">
-                                    <form method="post" action="{{ url_for('view_projects', project_id=project.id) }}">
-                                        <h5>Select Users to Assign</h5>
-                                        {{ wtf.form_field(assign.users) }}
-                                        <button type="submit" class="btn btn-primary rounded submit px-3">Assign</button>
-                                    </form>
+                                    <div class="row">
+                                        <div class="col-6">
+                                            <form method="post" action="{{ url_for('view_projects', project_id=project.id) }}">
+                                                <h5>Select Users to Assign</h5>
+                                                {{ wtf.form_field(assign.users) }}
+                                                <button type="submit" class="btn btn-primary rounded submit px-3">Assign</button>
+                                            </form>
+                                        </div>
+                                        <div class="col-6">
+                                            <form method="post" action="{{ url_for('view_projects', project_id=project.id) }}">
+                                                <h5> Select Users to Unassign</h5>
+                                                {{ wtf.form_field(unassign.users) }}
+                                                <button type="submit" class="btn btn-primary rounded submit px-3">Unassign</button>
+                                            </form>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
 
@@ -229,6 +240,8 @@
  <script>
      $(document).ready(function () {
         $('#comment-table').DataTable({
+            pageLength : 5,
+            lengthMenu: [5, 10, 25, 100],
             columns: [
                 null,
                 {orderable: true, searchable: false},
@@ -239,6 +252,8 @@
  <script>
      $(document).ready(function () {
         $('#assign-table').DataTable({
+            pageLength : 5,
+            lengthMenu: [5, 10, 25, 100],
             columns: [
                 null,
                 {orderable: true, searchable: false},

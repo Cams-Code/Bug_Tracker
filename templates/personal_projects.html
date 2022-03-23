@@ -44,7 +44,11 @@
                                                             <td>{{ project.assigned[0].full_name }}</td>
                                                             <td>{{ project.time_to_fix }}</td>
                                                             <td>{{ project.priority }}</td>
-                                                            <td>users</td>
+                                                            <td>
+                                                                {% for user in project.assigned %}
+                                                                    {{ user.full_name }},
+                                                                {% endfor %}
+                                                            </td>
                                                             <td>{{ project.status }}</td>
                                                             <td>
                                                                 <a href="{{ url_for('view_projects', project_id=project.id) }}" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm">

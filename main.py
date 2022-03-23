@@ -11,7 +11,7 @@ from sqlalchemy.orm import relationship
 from sqlalchemy import Column, Integer, ForeignKey, String, Text, Table
 from sqlalchemy.ext.declarative import declarative_base
 from flask_login import UserMixin, login_user, LoginManager, login_required, current_user, logout_user
-from forms import AddBugForm, RegisterForm, LoginForm, CommentForm, StatusForm, ProjectAssignForm
+from forms import AddBugForm, RegisterForm, LoginForm, CommentForm, StatusForm, ProjectAssignForm, ProjectUnassignedForm
 from flask_gravatar import Gravatar
 from functools import wraps
 from flask import abort
@@ -105,7 +105,7 @@ def load_user(user_id):
 def admin_only(f):
     @wraps(f)
     def decorated_function(*args, **kwargs):
-        if current_user.role == "admin":
+        if current_user.role == "Admin":
             return f(*args, **kwargs)
         else:
             return abort(403)
@@ -261,7 +261,9 @@ def view_projects(project_id):
     form = CommentForm()
     status_form = StatusForm()
     assign_form = ProjectAssignForm()
-    assign_form.users.choices = [(user.full_name, user.full_name) for user in user_list]
+    assign_form.users.choices = [(user.full_name, f"{user.full_name} - {user.role.title()}") for user in user_list]
+    unassign_form = ProjectUnassignedForm()
+    unassign_form.users.choices = [(user.full_name, f"{user.full_name} - {user.role.title()}") for user in project.assigned]
 
     # add comment
     if form.validate_on_submit() and form.comment.data:
@@ -292,7 +294,12 @@ def view_projects(project_id):
             db.session.commit()
         return redirect(url_for("view_projects", project_id=project_id))
 
-    return render_template("full_project_view.html", project=project, form=form, status=status_form, assign=assign_form)
+    # unassign users
+    elif request.method == "POST" and unassign_form.users.data:
+        for user in unassign_form.users.data:
+            pass
+
+    return render_template("full_project_view.html", project=project, form=form, status=status_form, assign=assign_form, unassign=unassign_form)
 
 
 @app.route("/delete_project/<int:project_id>", methods=["GET", "POST"])

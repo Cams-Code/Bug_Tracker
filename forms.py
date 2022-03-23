@@ -50,3 +50,9 @@ class StatusForm(FlaskForm):
 class ProjectAssignForm(FlaskForm):
     users = SelectMultipleField(choices="", validators=[DataRequired()])
     assign_submit = SubmitField("Assign")
+
+
+# WTForm linked to unassigning users to projects
+class ProjectUnassignedForm(FlaskForm):
+    users = SelectMultipleField(choices="", validators=[DataRequired()])
+    unassign_submit = SubmitField("Unassign")
