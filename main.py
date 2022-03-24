@@ -16,7 +16,6 @@ from flask_gravatar import Gravatar
 from functools import wraps
 from flask import abort
 from itsdangerous import URLSafeTimedSerializer
-import os
 
 # Initialising app
 
@@ -57,7 +56,7 @@ class Users(UserMixin, db.Model):
     role = Column(String(250), nullable=True)
 
     # relationship with Bugs table
-    bugs = relationship("Bugs", secondary=UsersBugs, backref="assigned")
+    bugs = relationship("Bugs", secondary=UsersBugs, backref=db.backref("assigned", lazy="dynamic"))
 
     # relationship with Comment table
     comments = relationship("Comment", back_populates="commenter")
@@ -280,26 +279,43 @@ def view_projects(project_id):
 
     # update status
     elif request.method == "POST" and status_form.status.data:
+        print("test")
         new_status = status_form.status.data
         project_to_update = Bugs.query.get(project_id)
         project_to_update.status = new_status
         db.session.commit()
         return redirect(url_for("view_projects", project_id=project_id))
 
-    # assign users
-    elif request.method == "POST" and assign_form.users.data:
-        for user in assign_form.users.data:
-            assigned_user = Users.query.filter_by(full_name=user).first()
-            assigned_user.bugs.append(project)
-            db.session.commit()
+    return render_template("full_project_view.html", project=project, form=form, status=status_form, assign=assign_form, unassign=unassign_form)
+
+
+@app.route("/assign_user/<int:project_id>", methods=["GET", "POST"])
+def assign_user(project_id):
+    if request.method == "POST":
+        project = Bugs.query.get(project_id)
+        user = request.form.get("users")
+        assigned_user = Users.query.filter_by(full_name=user).first()
+        project.assigned.append(assigned_user)
+        db.session.commit()
         return redirect(url_for("view_projects", project_id=project_id))
 
-    # unassign users
-    elif request.method == "POST" and unassign_form.users.data:
-        for user in unassign_form.users.data:
-            pass
 
-    return render_template("full_project_view.html", project=project, form=form, status=status_form, assign=assign_form, unassign=unassign_form)
+@app.route("/unassign_user/<int:project_id>", methods=["GET", "POST"])
+def unassign_user(project_id):
+
+    if request.method == "POST":
+        project = Bugs.query.get(project_id)
+        user = request.form.get("users")
+        full_user = Users.query.filter_by(full_name=user).first()
+
+        project.assigned.remove(full_user)
+        db.session.commit()
+
+        # user_to_unassign = Users.query.join(UsersBugs).join(Bugs).filter((UsersBugs.c.user_id == full_user.id) & (UsersBugs.c.bug_id == project_id)).all()
+        # print(user_to_unassign)
+        # db.session.delete(user_to_unassign)
+        # db.session.commit()
+        return redirect(url_for("view_projects", project_id=project_id))
 
 
 @app.route("/delete_project/<int:project_id>", methods=["GET", "POST"])
