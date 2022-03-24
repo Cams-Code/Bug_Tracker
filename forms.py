@@ -56,3 +56,10 @@ class ProjectAssignForm(FlaskForm):
 class ProjectUnassignedForm(FlaskForm):
     users = SelectMultipleField(choices="", validators=[DataRequired()])
     unassign_submit = SubmitField("Unassign")
+
+
+# WTForm linked to assigning users a role
+class RoleAssign(FlaskForm):
+    users = SelectMultipleField(choices="", validators=[DataRequired()], render_kw={"style": "font-weight: bold;"})
+    role = SelectField(choices="", validators=[DataRequired()])
+    role_submit = SubmitField("Submit")

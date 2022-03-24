@@ -11,7 +11,7 @@ from sqlalchemy.orm import relationship
 from sqlalchemy import Column, Integer, ForeignKey, String, Text, Table
 from sqlalchemy.ext.declarative import declarative_base
 from flask_login import UserMixin, login_user, LoginManager, login_required, current_user, logout_user
-from forms import AddBugForm, RegisterForm, LoginForm, CommentForm, StatusForm, ProjectAssignForm, ProjectUnassignedForm
+from forms import AddBugForm, RegisterForm, LoginForm, CommentForm, StatusForm, ProjectAssignForm, ProjectUnassignedForm, RoleAssign
 from flask_gravatar import Gravatar
 from functools import wraps
 from flask import abort
@@ -312,19 +312,27 @@ def delete_project(project_id):
     return redirect(url_for("all_projects"))
 
 
-@app.route("/all_users", methods=["GET", "POST"])
+@app.route("/manage_users", methods=["GET", "POST"])
 @login_required
 def all_users():
     users = Users.query.all()
-    return render_template("users.html", users=users)
+    form = RoleAssign()
+
+    roles = ["Admin", "Team Leader", "Manager", "Senior Developer", "Developer", "Graduate Developer", "Junior Developer", "Part-Time Developer"]
+
+    form.users.choices = [(user.full_name, user.full_name) for user in users]
+
+    form.role.choices = roles
+    if form.validate_on_submit():
+        pass
+    return render_template("users.html", users=users, form=form)
 
 
-@app.route("/manage_users", methods=["GET", "POST"])
+@app.route("/assign_users", methods=["GET", "POST"])
 @login_required
 @admin_only
-def manage_users():
-    project = Bugs.query.get(1)
-    return render_template("manage_users.html", project=project)
+def assign_users():
+    return render_template("assign_users.html")
 
 
 if __name__ == "__main__":
