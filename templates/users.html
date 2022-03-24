@@ -21,7 +21,7 @@
                                     <h6 class="m-0 font-weight-bold text-primary">Assign Roles</h6>
                                 </div>
                                 <div class="card-body">
-                                    <form method="post" action="{{ url_for('all_users') }}" class="col-6">
+                                    <form method="post" action="{{ url_for('all_users') }}" class="col-6" style="margin-left: auto; margin-right: auto;">
                                         <b>{{ wtf.form_field(form.users) }}</b>
 
                                         <b>{{ wtf.form_field(form.role) }}</b>

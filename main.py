@@ -323,8 +323,13 @@ def all_users():
     form.users.choices = [(user.full_name, user.full_name) for user in users]
 
     form.role.choices = roles
-    if form.validate_on_submit():
-        pass
+    if request.method == "POST" and form.users.data:
+        for user in form.users.data:
+            print(user)
+            user_to_assign = Users.query.filter_by(full_name=user).first()
+            user_to_assign.role = form.role.data
+            db.session.commit()
+        return redirect(url_for("all_users"))
     return render_template("users.html", users=users, form=form)
 
 
