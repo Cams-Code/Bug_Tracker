@@ -11,7 +11,8 @@ from sqlalchemy.orm import relationship
 from sqlalchemy import Column, Integer, ForeignKey, String, Text, Table
 from sqlalchemy.ext.declarative import declarative_base
 from flask_login import UserMixin, login_user, LoginManager, login_required, current_user, logout_user
-from forms import AddBugForm, RegisterForm, LoginForm, CommentForm, StatusForm, ProjectAssignForm, ProjectUnassignedForm, RoleAssign
+from forms import AddBugForm, RegisterForm, LoginForm, CommentForm, StatusForm,\
+    ProjectAssignForm, ProjectUnassignedForm, RoleAssign, EditUser
 from flask_gravatar import Gravatar
 from functools import wraps
 from flask import abort
@@ -153,12 +154,16 @@ def register():
         # Check for duplicated email
         user_name = form.name.data
         user_password = form.password.data
+        check_password = form.confirm_password.data
         user_email = form.email.data
         if Users.query.filter_by(email=user_email).first():
 
             # Flash message saying duplicated email
             flash("That email already exists, try login instead.")
             return redirect(url_for("login"))
+        elif user_password != check_password:
+            flash("The passwords do not match, try again.")
+            return redirect(url_for("register"))
         else:
             # add new user
 
@@ -311,10 +316,6 @@ def unassign_user(project_id):
         project.assigned.remove(full_user)
         db.session.commit()
 
-        # user_to_unassign = Users.query.join(UsersBugs).join(Bugs).filter((UsersBugs.c.user_id == full_user.id) & (UsersBugs.c.bug_id == project_id)).all()
-        # print(user_to_unassign)
-        # db.session.delete(user_to_unassign)
-        # db.session.commit()
         return redirect(url_for("view_projects", project_id=project_id))
 
 
@@ -349,11 +350,30 @@ def all_users():
     return render_template("users.html", users=users, form=form)
 
 
-@app.route("/assign_users", methods=["GET", "POST"])
+@app.route("/edit_profile/<int:user_id>", methods=["GET", "POST"])
 @login_required
-@admin_only
-def assign_users():
-    return render_template("assign_users.html")
+def edit_profile(user_id):
+    user = Users.query.get(user_id)
+    form = EditUser(
+        name=user.full_name,
+        email=user.email
+    )
+
+    if form.validate_on_submit():
+        full_name = form.name.data
+        email = form.email.data
+        password = form.password.data
+        check_password = form.confirm_password.data
+        if password != check_password:
+            flash("Passwords do not match, try again.")
+            return redirect(url_for("edit_profile"))
+        else:
+            user.full_name = full_name
+            user.email = email
+            user.password = generate_password_hash(password, method="pbkdf2:sha256", salt_length=8)
+            db.session.commit()
+            return redirect(url_for("all_users"))
+    return render_template("user_profile.html", user=user, form=form)
 
 
 if __name__ == "__main__":

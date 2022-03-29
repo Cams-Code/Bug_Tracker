@@ -23,6 +23,7 @@ class RegisterForm(FlaskForm):
     name = StringField("", validators=[DataRequired()], render_kw={"placeholder": "Full Name", "class": "form-control"})
     email = StringField("", validators=[DataRequired(), Email()], render_kw={"placeholder": "Email Address", "class": "form-control"})
     password = PasswordField("", validators=[DataRequired()], render_kw={"placeholder": "Password", "class": "form-control"})
+    confirm_password = PasswordField("", validators=[DataRequired()], render_kw={"placeholder": "Confirm Password", "class": "form-control"})
     submit = SubmitField("Register", render_kw={"class": "btn form-control btn-primary rounded submit px-3"})
 
 
@@ -63,3 +64,12 @@ class RoleAssign(FlaskForm):
     users = SelectMultipleField(choices="", validators=[DataRequired()], render_kw={"style": "font-weight: bold;"})
     role = SelectField(choices="", validators=[DataRequired()])
     role_submit = SubmitField("Submit")
+
+
+# WTForm update user
+class EditUser(FlaskForm):
+    name = StringField("Full Name", validators=[DataRequired()])
+    email = StringField("Email Address", validators=[DataRequired(), Email()])
+    password = PasswordField("Password", validators=[DataRequired()])
+    confirm_password = PasswordField("Confirm Password", validators=[DataRequired()])
+    submit = SubmitField("Register", render_kw={"class": "btn form-control btn-primary rounded submit px-3"})

@@ -46,7 +46,7 @@
                                                     <th>Full Name</th>
                                                     <th>Role</th>
                                                     <th>Email Address</th>
-                                                    <th>View Profile</th>
+                                                    <th>Edit Profile</th>
                                                 </tr>
                                             </thead>
                                             {% for user in users %}
@@ -55,7 +55,10 @@
                                                         <td>{{ user.full_name.title() }}</td>
                                                         <td>{{ user.role.title() }}</td>
                                                         <td>{{ user.email }}</td>
-                                                        <td>beep boop</td>
+                                                        <td>
+                                                            <a href="{{ url_for('edit_profile', user_id=user.id) }}" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm">
+                                                            <i class="fas fa-sm text-white-50"></i> Edit Profile</a>
+                                                        </td>
                                                 </tr>
                                                 {% endif %}
                                             {% endfor %}
