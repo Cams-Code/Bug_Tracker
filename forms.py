@@ -72,4 +72,4 @@ class EditUser(FlaskForm):
     email = StringField("Email Address", validators=[DataRequired(), Email()])
     password = PasswordField("Password", validators=[DataRequired()])
     confirm_password = PasswordField("Confirm Password", validators=[DataRequired()])
-    submit = SubmitField("Register", render_kw={"class": "btn form-control btn-primary rounded submit px-3"})
+    submit = SubmitField("Confirm", render_kw={"class": "btn form-control btn-primary rounded submit px-3"})

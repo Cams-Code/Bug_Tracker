@@ -8,11 +8,12 @@ from datetime import date
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.orm import relationship
-from sqlalchemy import Column, Integer, ForeignKey, String, Text, Table
+from sqlalchemy import Column, Integer, ForeignKey, String, Text
 from sqlalchemy.ext.declarative import declarative_base
 from flask_login import UserMixin, login_user, LoginManager, login_required, current_user, logout_user
 from forms import AddBugForm, RegisterForm, LoginForm, CommentForm, StatusForm,\
     ProjectAssignForm, ProjectUnassignedForm, RoleAssign, EditUser
+from graphs import CreateBar, CreatePie
 from flask_gravatar import Gravatar
 from functools import wraps
 from flask import abort
@@ -189,6 +190,11 @@ def register():
 @app.route("/dashboard", methods=["GET", "POST"])
 @login_required
 def dashboard():
+    projects = Bugs.query.all()
+
+    # Creating Pie Chart
+    CreatePie(data=projects)
+
     return render_template("dashboard.html")
 
 
@@ -358,23 +364,41 @@ def edit_profile(user_id):
         name=user.full_name,
         email=user.email
     )
-
-    if form.validate_on_submit():
-        full_name = form.name.data
+    if request.method == "POST":
+        print("test2")
+        name = form.name.data
         email = form.email.data
         password = form.password.data
-        check_password = form.confirm_password.data
-        if password != check_password:
+        confirm_password = form.confirm_password.data
+        if password != confirm_password:
             flash("Passwords do not match, try again.")
-            return redirect(url_for("edit_profile"))
+            return redirect(url_for("edit_profile", user_id=user_id))
         else:
-            user.full_name = full_name
-            user.email = email
-            user.password = generate_password_hash(password, method="pbkdf2:sha256", salt_length=8)
-            db.session.commit()
-            return redirect(url_for("all_users"))
-    return render_template("user_profile.html", user=user, form=form)
+            user_details = [name, email, password, confirm_password]
+            print(user_details)
+            return redirect(url_for("edit_confirmation", user_details=user_details, user_id=user_id))
+    return render_template("user_profile.html", user=user, form=form, confirm=False)
 
+
+@app.route("/edit_profile_confirm/<int:user_id>", methods=["GET", "POST"])
+@login_required
+def edit_confirmation(user_id, user_details):
+    print("test5")
+    user = Users.query.get(user_id)
+    form = EditUser(
+        name=user_details[0],
+        email=user_details[1],
+        password=user_details[2],
+        confirm_password=user_details[3]
+    )
+
+    if request.method == "post":
+        user.full_name = user_details[0]
+        user.email = user_details[1]
+        user.password = generate_password_hash(user_details[2], method="pbkdf2:sha256", salt_length=8)
+        db.session.commit()
+        return redirect(url_for("all_users"))
+    return render_template("user_profile.html", user=user, form=form, confirm=True, user_details=user_details)
 
 if __name__ == "__main__":
     app.run(debug=True)
