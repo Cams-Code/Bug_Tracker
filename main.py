@@ -13,7 +13,7 @@ from sqlalchemy.ext.declarative import declarative_base
 from flask_login import UserMixin, login_user, LoginManager, login_required, current_user, logout_user
 from forms import AddBugForm, RegisterForm, LoginForm, CommentForm, StatusForm,\
     ProjectAssignForm, ProjectUnassignedForm, RoleAssign, EditUser
-from graphs import CreateBar, CreatePie
+from graphs import CreatePriorityBar, CreatePie, CreateTimeBar
 from flask_gravatar import Gravatar
 from functools import wraps
 from flask import abort
@@ -194,6 +194,12 @@ def dashboard():
 
     # Creating Pie Chart
     CreatePie(data=projects)
+
+    # Create Priority Bar Chart
+    CreatePriorityBar(data=projects)
+
+    # Create Time Bar Chart
+    CreateTimeBar(data=projects)
 
     return render_template("dashboard.html")
 
