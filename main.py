@@ -406,5 +406,29 @@ def edit_confirmation(user_id, user_details):
         return redirect(url_for("all_users"))
     return render_template("user_profile.html", user=user, form=form, confirm=True, user_details=user_details)
 
+
+@app.route("/dashboard/pie_chart")
+@login_required
+def pie_chart():
+    projects = Bugs.query.all()
+    CreatePie(data=projects)
+    return render_template("pie_chart.html")
+
+
+@app.route("/dashboard/priority_chart")
+@login_required
+def priority_chart():
+    projects = Bugs.query.all()
+    CreatePriorityBar(projects)
+    return render_template("priority_chart.html")
+
+
+@app.route("/dashboard/time_chart")
+@login_required
+def time_chart():
+    projects = Bugs.query.all()
+    CreateTimeBar(projects)
+    return render_template("time_chart.html")
+
 if __name__ == "__main__":
     app.run(debug=True)

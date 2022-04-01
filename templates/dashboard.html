@@ -11,8 +11,8 @@
 
                     <div class="row">
 
-                        <!-- Area Chart -->
-                        <div class="col-7">
+                        <!-- Priority Chart -->
+                        <div class="col-l-7 col-xl-7 col-md-12">
                             <div class="card shadow mb-4">
                                 <div
                                     class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
@@ -22,8 +22,8 @@
                                 </div>
                                 <!-- Card Body -->
                                 <div class="card-body">
-                                    <div class="chart-area">
-                                        <img style="width:100%; height: 100%" src="static/images/priority_bar.png">
+                                    <div class="chart-area" style="margin:auto; display: flex; align-items: center;">
+                                        <iframe src="dashboard/priority_chart" height="515" width="1000"></iframe>
                                     </div>
                                 </div>
                             </div>
@@ -31,16 +31,17 @@
 
                         <!-- Pie Chart -->
 
-                        <div class="col-5">
+                        <div class="col-l-5 col-xl-5 col-md-12">
                             <div class="card shadow mb-4">
                                 <!-- Card Header -->
-                                <div
-                                    class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
                                     <h6 class="m-0 font-weight-bold text-primary">Project Current Status Pie Chart</h6>
                                 </div>
                                 <!-- Card Body -->
                                 <div class="card-body">
-                                    <img style="width:100%; height: 100%" src="static/images/pie_chart.png">
+                                    <div class="chart-area justify-content-center" style="margin:auto; display: flex; align-items: center;">
+                                        <iframe src="dashboard/pie_chart" height="515" width="500"></iframe>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -50,52 +51,17 @@
                     <div class="row">
 
                         <!-- Content Column -->
-                        <div class="col-6">
+                        <div class="col-xl-7 col-l-7 col-12" style="margin: auto;">
 
                             <!-- Project Card Example -->
                             <div class="card shadow mb-4">
                                 <div class="card-header py-3">
-                                    <h6 class="m-0 font-weight-bold text-primary">Projects</h6>
+                                    <h6 class="m-0 font-weight-bold text-primary">Project Time Bar Chart</h6>
                                 </div>
                                 <div class="card-body">
-                                    <img style="width:100%; height: 100%" src="static/images/time_bar.png">
-                                </div>
-                            </div>
-
-                        </div>
-
-                        <div class="col-lg-6 mb-4">
-
-                            <!-- Illustrations -->
-                            <div class="card shadow mb-4">
-                                <div class="card-header py-3">
-                                    <h6 class="m-0 font-weight-bold text-primary">Illustrations</h6>
-                                </div>
-                                <div class="card-body">
-                                    <div class="text-center">
-                                        <img class="img-fluid px-3 px-sm-4 mt-3 mb-4" style="width: 25rem;"
-                                            src="img/undraw_posting_photo.svg" alt="...">
+                                    <div class="chart-area" style="margin:auto; display: flex; align-items: center;">
+                                        <iframe src="dashboard/time_chart" height="515" width="1000"></iframe>
                                     </div>
-                                    <p>Add some quality, svg illustrations to your project courtesy of <a
-                                            target="_blank" rel="nofollow" href="https://undraw.co/">unDraw</a>, a
-                                        constantly updated collection of beautiful svg images that you can use
-                                        completely free and without attribution!</p>
-                                    <a target="_blank" rel="nofollow" href="https://undraw.co/">Browse Illustrations on
-                                        unDraw &rarr;</a>
-                                </div>
-                            </div>
-
-                            <!-- Approach -->
-                            <div class="card shadow mb-4">
-                                <div class="card-header py-3">
-                                    <h6 class="m-0 font-weight-bold text-primary">Development Approach</h6>
-                                </div>
-                                <div class="card-body">
-                                    <p>SB Admin 2 makes extensive use of Bootstrap 4 utility classes in order to reduce
-                                        CSS bloat and poor page performance. Custom CSS classes are used to create
-                                        custom components and custom utility classes.</p>
-                                    <p class="mb-0">Before working with this theme, you should become familiar with the
-                                        Bootstrap framework, especially the utility classes.</p>
                                 </div>
                             </div>
 
