@@ -16,7 +16,7 @@ def CreatePriorityBar(data):
     fig = px.bar(
         x=priority_df.index,
         y=priority_df.values,
-        height=350,
+        height=500,
     )
 
     fig.update_layout(
@@ -40,7 +40,7 @@ def CreatePriorityBar(data):
     fig.update_xaxes(dtick=1)
     fig.update_yaxes(dtick=1)
 
-    fig.update_traces(marker_line_width=2, marker_line_color="black",)
+    fig.update_traces(marker_line_width=2, marker_line_color="black")
 
     fig.write_html("templates/priority_chart.html")
 
@@ -57,7 +57,7 @@ def CreateTimeBar(data):
         x=time_df.index,
         y=time_df.values,
         labels=time_df.index,
-        height=350
+        height=500
     )
 
     fig.update_layout(
@@ -80,6 +80,8 @@ def CreateTimeBar(data):
 
     fig.update_xaxes(dtick=1)
     fig.update_yaxes(dtick=1)
+
+    fig.update_traces(marker_line_width=2, marker_line_color="black", marker_color="darkblue")
 
     fig.write_html("templates/time_chart.html")
 
