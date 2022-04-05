@@ -24,7 +24,7 @@
                                 <!-- Card Body -->
                                 <div class="card-body">
                                     <div class="chart-area">
-                                        <form method="post" action="{{ url_for('edit_profile', user_id=user.id, user_details=user_details) }}">
+                                        <form method="post">
                                             {% with messages = get_flashed_messages() %}
 							                    {% if messages %}
 								                    {% for message in messages %}
@@ -36,11 +36,28 @@
                                             {{ wtf.form_field(form.email) }}
                                             {{ wtf.form_field(form.password) }}
                                             {{ wtf.form_field(form.confirm_password) }}
-                                            <button id="edit" type="submit" class="btn btn-primary rounded submit px-3">Confirm</button>
+                                            <button id="edit" type="button" class="btn btn-primary rounded submit px-3" data-toggle="modal" data-target="#editModal">Confirm</button>
+
+                                            <!-- Edit Modal-->
+                                            <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+                                                aria-hidden="true">
+                                                <div class="modal-dialog" role="document">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h5 class="modal-title" id="exampleModalLabel">Confirm Details</h5>
+                                                            <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                                                                <span aria-hidden="true">×</span>
+                                                            </button>
+                                                        </div>
+                                                        <div class="modal-body">Are you sure all details entered are correct? If yes, select Confirm</div>
+                                                        <div class="modal-footer">
+                                                            <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+                                                            <button type="submit" class="btn btn-primary rounded submit px-3" data-toggle="modal" data-target="#editModal">Confirm</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </form>
-                                        {% if confirm %}
-                                            <span data-toggle="modal" data-target="#editModal"></span>
-                                        {% endif %}
                                     </div>
                                 </div>
                             </div>
@@ -51,23 +68,5 @@
                     </div>
 
                 </div>
-<!-- Edit Modal-->
-    <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-        aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Confirm Details</h5>
-                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">×</span>
-                    </button>
-                </div>
-                <div class="modal-body">Are you sure all details entered are correct? If yes, select Confirm</div>
-                <div class="modal-footer">
-                    <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-                    <a class="btn btn-primary" href="{{ url_for('edit_confirmation', user_id=user.id, user_details=user_details) }}">Confirm</a>
-                </div>
-            </div>
-        </div>
-    </div>
+
 {% endblock %}

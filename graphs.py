@@ -11,7 +11,6 @@ def CreatePriorityBar(data):
     priority_df = pd.DataFrame(priority_list)
     priority_df.rename(columns={0: "priority"}, inplace=True)
     priority_df = priority_df.priority.value_counts()
-    print(priority_df.head)
 
     fig = px.bar(
         x=priority_df.index,

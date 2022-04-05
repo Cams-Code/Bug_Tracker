@@ -190,17 +190,6 @@ def register():
 @app.route("/dashboard", methods=["GET", "POST"])
 @login_required
 def dashboard():
-    projects = Bugs.query.all()
-
-    # Creating Pie Chart
-    CreatePie(data=projects)
-
-    # Create Priority Bar Chart
-    CreatePriorityBar(data=projects)
-
-    # Create Time Bar Chart
-    CreateTimeBar(data=projects)
-
     return render_template("dashboard.html")
 
 
@@ -296,7 +285,6 @@ def view_projects(project_id):
 
     # update status
     elif request.method == "POST" and status_form.status.data:
-        print("test")
         new_status = status_form.status.data
         project_to_update = Bugs.query.get(project_id)
         project_to_update.status = new_status
@@ -354,7 +342,6 @@ def all_users():
     form.role.choices = roles
     if request.method == "POST" and form.users.data:
         for user in form.users.data:
-            print(user)
             user_to_assign = Users.query.filter_by(full_name=user).first()
             user_to_assign.role = form.role.data
             db.session.commit()
@@ -371,7 +358,6 @@ def edit_profile(user_id):
         email=user.email
     )
     if request.method == "POST":
-        print("test2")
         name = form.name.data
         email = form.email.data
         password = form.password.data
@@ -380,31 +366,14 @@ def edit_profile(user_id):
             flash("Passwords do not match, try again.")
             return redirect(url_for("edit_profile", user_id=user_id))
         else:
-            user_details = [name, email, password, confirm_password]
-            print(user_details)
-            return redirect(url_for("edit_confirmation", user_details=user_details, user_id=user_id))
-    return render_template("user_profile.html", user=user, form=form, confirm=False)
+            user.password = password
+            user.full_name = name
+            user.email = email
+            user.password = generate_password_hash(password, method="pbkdf2:sha256", salt_length=8)
+            db.session.commit()
+            return redirect(url_for("dashboard"))
 
-
-@app.route("/edit_profile_confirm/<int:user_id>", methods=["GET", "POST"])
-@login_required
-def edit_confirmation(user_id, user_details):
-    print("test5")
-    user = Users.query.get(user_id)
-    form = EditUser(
-        name=user_details[0],
-        email=user_details[1],
-        password=user_details[2],
-        confirm_password=user_details[3]
-    )
-
-    if request.method == "post":
-        user.full_name = user_details[0]
-        user.email = user_details[1]
-        user.password = generate_password_hash(user_details[2], method="pbkdf2:sha256", salt_length=8)
-        db.session.commit()
-        return redirect(url_for("all_users"))
-    return render_template("user_profile.html", user=user, form=form, confirm=True, user_details=user_details)
+    return render_template("user_profile.html", user=user, form=form)
 
 
 @app.route("/dashboard/pie_chart")
