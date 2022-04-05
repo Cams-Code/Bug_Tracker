@@ -25,7 +25,11 @@
                                         <b>{{ wtf.form_field(form.users) }}</b>
 
                                         <b>{{ wtf.form_field(form.role) }}</b>
-                                        <button type="submit" class="btn btn-primary rounded submit px-3">Assign</button>
+                                        {% if current_user.role == "Admin" %}
+                                            <button type="submit" class="btn btn-primary rounded submit px-3">Assign</button>
+                                        {% else %}
+                                            <button type="submit" class="btn btn-primary rounded submit px-3" disabled>Assign</button>
+                                        {% endif %}
                                     </form>
                                 </div>
                             </div>
@@ -55,10 +59,17 @@
                                                         <td>{{ user.full_name.title() }}</td>
                                                         <td>{{ user.role.title() }}</td>
                                                         <td>{{ user.email }}</td>
-                                                        <td>
-                                                            <a href="{{ url_for('edit_profile', user_id=user.id) }}" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm">
-                                                            <i class="fas fa-sm text-white-50"></i> Edit Profile</a>
-                                                        </td>
+                                                        {% if current_user.role == "Admin" or current_user.id == user.id %}
+                                                            <td>
+                                                                <form method="get" action="{{ url_for('edit_profile', user_id=user.id) }}">
+                                                                    <button type="submit" class="btn btn-primary rounded submit px-3">Edit Profile</button>
+                                                                </form>
+                                                            </td>
+                                                        {% else %}
+                                                            <td>
+                                                                <button type="button" class="btn btn-primary rounded submit px-3" disabled>Edit Profile</button>
+                                                            </td>
+                                                        {% endif %}
                                                 </tr>
                                                 {% endif %}
                                             {% endfor %}

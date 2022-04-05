@@ -399,5 +399,6 @@ def time_chart():
     CreateTimeBar(projects)
     return render_template("time_chart.html")
 
+
 if __name__ == "__main__":
     app.run(debug=True)
