@@ -22,9 +22,14 @@
                                 </div>
                                 <!-- Card Body -->
                                 <div class="card-body">
-                                    <div class="chart-area" style="margin:auto; display: flex; align-items: center;">
-                                        <iframe src="dashboard/priority_chart" height="515" width="1000"></iframe>
+                                    <div class="chart-area justify-content-center" style="margin:auto; display: flex; align-items: center;">
+                                        {% if proj_count > 0 %}
+                                            <iframe src="dashboard/priority_chart" height="515" width="1000"></iframe>
+                                        {% else %}
+                                            <h2 >No Data available</h2>
+                                        {% endif %}
                                     </div>
+
                                 </div>
                             </div>
                         </div>
@@ -40,7 +45,11 @@
                                 <!-- Card Body -->
                                 <div class="card-body">
                                     <div class="chart-area justify-content-center" style="margin:auto; display: flex; align-items: center;">
-                                        <iframe src="dashboard/pie_chart" height="515" width="500"></iframe>
+                                        {% if proj_count > 0 %}
+                                            <iframe src="dashboard/pie_chart" height="515" width="500"></iframe>
+                                        {% else %}
+                                            <h2>No Data available</h2>
+                                        {% endif %}
                                     </div>
                                 </div>
                             </div>
@@ -59,8 +68,12 @@
                                     <h6 class="m-0 font-weight-bold text-primary">Project Time Bar Chart</h6>
                                 </div>
                                 <div class="card-body">
-                                    <div class="chart-area" style="margin:auto; display: flex; align-items: center;">
-                                        <iframe src="dashboard/time_chart" height="515" width="1000"></iframe>
+                                    <div class="chart-area justify-content-center" style="margin:auto; display: flex; align-items: center;">
+                                        {% if proj_count > 0 %}
+                                            <iframe src="dashboard/time_chart" height="515" width="1000"></iframe>
+                                        {% else %}
+                                            <h2>No Data Available</h2>
+                                        {% endif %}
                                     </div>
                                 </div>
                             </div>

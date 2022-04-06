@@ -14,7 +14,7 @@ class AddBugForm(FlaskForm):
 
     choices = (1, 2, 3, 4, 5, 6, 7, 8, 9, 10)
     priority = SelectField("Priority (10 being very urgent)", choices=choices, validators=[DataRequired()])
-    time_to_fix = SelectField("Estimated Time to fix (10 being very long)", choices=choices, validators=[DataRequired()])
+    time_to_fix = SelectField("Estimated Time to Complete (10 being very long)", choices=choices, validators=[DataRequired()])
     submit = SubmitField("Submit", render_kw={"class": "d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm fas fa-sm text-white-50", "style": "width:100%;"})
 
 

@@ -110,7 +110,7 @@
                         <!-- Content Column -->
                         <div class="users">
 
-                            <!-- Project Card Example -->
+                            <!-- Assigned users -->
                             <div class="card shadow mb-4">
                                 <div class="card-header py-3">
                                     <h6 class="m-0 font-weight-bold text-primary">Assigned Users</h6>
@@ -189,14 +189,24 @@
                                             <form method="post" action="{{ url_for('assign_user', project_id=project.id) }}">
                                                 <h5>Select Users to Assign</h5>
                                                 {{ wtf.form_field(assign.users) }}
-                                                <button id="assign" type="submit" class="btn btn-primary rounded submit px-3">Assign</button>
+                                                {% if current_user.role == "Admin" %}
+                                                    <button id="assign" type="submit" class="btn btn-primary rounded submit px-3">Assign</button>
+                                                {% else %}
+                                                    <button id="assign" type="submit" class="btn btn-primary rounded submit px-3" disabled>Assign</button>
+                                                {% endif %}
                                             </form>
                                         </div>
                                         <div class="col-6">
                                             <form method="post" action="{{ url_for('unassign_user', project_id=project.id) }}">
                                                 <h5> Select Users to Unassign</h5>
                                                 {{ wtf.form_field(unassign.users) }}
-                                                <button id="unassign" type="submit" class="btn btn-primary rounded submit px-3" >Unassign</button>
+                                                {% if unassign_ability == False %}
+                                                    <button id="unassign" type="submit" class="btn btn-primary rounded submit px-3" disabled>Unassign</button>
+                                                {% elif current_user.role == "Admin" %}
+                                                    <button id="unassign" type="submit" class="btn btn-primary rounded submit px-3">Unassign</button>
+                                                {% else %}
+                                                    <button id="unassign" type="submit" class="btn btn-primary rounded submit px-3" disabled>Unassign</button>
+                                                {% endif %}
                                             </form>
                                         </div>
                                     </div>

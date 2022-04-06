@@ -196,7 +196,9 @@ def register():
 @app.route("/dashboard", methods=["GET", "POST"])
 @login_required
 def dashboard():
-    return render_template("dashboard.html")
+    projects = Bugs.query.all()
+    proj_count = len(projects)
+    return render_template("dashboard.html", proj_count=proj_count)
 
 
 @app.route("/add_bug", methods=["GET", "POST"])
@@ -278,6 +280,11 @@ def view_projects(project_id):
     assign_form.users.choices = [(user.full_name, f"{user.full_name} - {user.role.title()}") for user in user_list]
     unassign_form = ProjectUnassignedForm()
     unassign_form.users.choices = [(user.full_name, f"{user.full_name} - {user.role.title()}") for user in project.assigned]
+    if len(unassign_form.users.choices) == 1:
+        unassign_ability = False
+    else:
+        unassign_ability = True
+
 
     # add comment
     if form.validate_on_submit() and form.comment.data:
@@ -301,7 +308,7 @@ def view_projects(project_id):
         db.session.commit()
         return redirect(url_for("view_projects", project_id=project_id))
 
-    return render_template("full_project_view.html", project=project, form=form, status=status_form, assign=assign_form, unassign=unassign_form)
+    return render_template("full_project_view.html", project=project, form=form, status=status_form, assign=assign_form, unassign=unassign_form, unassign_ability=unassign_ability)
 
 
 @app.route("/assign_user/<int:project_id>", methods=["GET", "POST"])
