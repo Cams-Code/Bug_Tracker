@@ -21,7 +21,7 @@ import os
 # Initialising app
 
 app = Flask(__name__)
-app.config['SECRET_KEY'] = os.environ.get("SECRET_KEY")
+app.config['SECRET_KEY'] = "super_secret_key"
 Bootstrap(app)
 
 # Initialising addons
@@ -34,7 +34,7 @@ Base = declarative_base()
 
 # Connect to Database
 
-app.config["SQLALCHEMY_DATABASE_URI"] = os.environ.get("DATABASE_URL", "sqlite:///bugtracker.db")
+app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///bugtracker.db"
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 db = SQLAlchemy(app)
 
