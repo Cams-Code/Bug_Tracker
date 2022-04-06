@@ -4,11 +4,11 @@ import sqlalchemy as sqlalchemy
 from flask import Flask, render_template, redirect, url_for, flash, request, session
 from flask_bootstrap import Bootstrap
 from flask_ckeditor import CKEditor
-from datetime import date
+from datetime import datetime
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.orm import relationship
-from sqlalchemy import Column, Integer, ForeignKey, String, Text
+from sqlalchemy import Column, Integer, ForeignKey, String, Text, DateTime
 from sqlalchemy.ext.declarative import declarative_base
 from flask_login import UserMixin, login_user, LoginManager, login_required, current_user, logout_user
 from forms import AddBugForm, RegisterForm, LoginForm, CommentForm, StatusForm,\
@@ -73,7 +73,8 @@ class Bugs(db.Model):
     time_to_fix = Column(Integer, nullable=False)
     priority = Column(Integer, nullable=False)
     status = Column(String(250), nullable=False)
-
+    date_added = Column(String, nullable=False)
+    date_updated = Column(String, nullable=False)
     # relationship with Comment table
     comments = relationship("Comment", back_populates="bug")
 
@@ -93,7 +94,7 @@ class Comment(db.Model):
 
 
 # Create tables in db
-# db.create_all()
+db.create_all()
 
 
 # user_loader callback
@@ -182,6 +183,11 @@ def register():
             user = Users.query.filter_by(email=user_email).first()
             login_user(user)
 
+            # assign admin role to first account registered
+            if user.id == 1:
+                user.role = "Admin"
+                db.session.commit()
+
             return redirect(url_for("dashboard"))
 
     return render_template("register.html", form=form)
@@ -205,7 +211,9 @@ def add_bug():
             full_desc=form.full_desc.data,
             time_to_fix=int(form.time_to_fix.data),
             priority=form.priority.data,
-            status="Not Started"
+            status="Not Started",
+            date_added=datetime.now().strftime("%H:%M:%S %d/%m/%Y"),
+            date_updated=datetime.now().strftime("%H:%M:%S %d/%m/%Y")
         )
 
         db.session.add(new_bug)
@@ -243,7 +251,7 @@ def edit_projects(project_id):
         brief_desc=project.brief_desc,
         full_desc=project.full_desc,
         priority=project.priority,
-        time_to_fix=project.time_to_fix
+        time_to_fix=project.time_to_fix,
     )
 
     if form.validate_on_submit():
@@ -252,6 +260,7 @@ def edit_projects(project_id):
         project.full_desc = form.full_desc.data
         project.priority = form.priority.data
         project.time_to_fix = form.time_to_fix.data
+        project.date_updated = datetime.now().strftime("%H:%M:%S %d/%m/%Y")
         db.session.commit()
         return redirect(url_for("view_projects", project_id=project.id))
 
@@ -288,6 +297,7 @@ def view_projects(project_id):
         new_status = status_form.status.data
         project_to_update = Bugs.query.get(project_id)
         project_to_update.status = new_status
+        project_to_update.date_updated = datetime.now().strftime("%H:%M:%S %d/%m/%Y")
         db.session.commit()
         return redirect(url_for("view_projects", project_id=project_id))
 

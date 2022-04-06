@@ -62,12 +62,12 @@
                                                         {% if current_user.role == "Admin" or current_user.id == user.id %}
                                                             <td>
                                                                 <form method="get" action="{{ url_for('edit_profile', user_id=user.id) }}">
-                                                                    <button type="submit" class="btn btn-primary rounded submit px-3">Edit Profile</button>
+                                                                    <button type="submit" class="btn btn-primary rounded submit px-3">Edit Details</button>
                                                                 </form>
                                                             </td>
                                                         {% else %}
                                                             <td>
-                                                                <button type="button" class="btn btn-primary rounded submit px-3" disabled>Edit Profile</button>
+                                                                <button type="button" class="btn btn-primary rounded submit px-3" disabled>Edit Details</button>
                                                             </td>
                                                         {% endif %}
                                                 </tr>
