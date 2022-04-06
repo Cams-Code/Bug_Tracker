@@ -1,6 +1,5 @@
 # imports
 
-import sqlalchemy as sqlalchemy
 from flask import Flask, render_template, redirect, url_for, flash, request, session
 from flask_bootstrap import Bootstrap
 from flask_ckeditor import CKEditor
@@ -8,21 +7,21 @@ from datetime import datetime
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.orm import relationship
-from sqlalchemy import Column, Integer, ForeignKey, String, Text, DateTime
+from sqlalchemy import Column, Integer, ForeignKey, String, Text
 from sqlalchemy.ext.declarative import declarative_base
 from flask_login import UserMixin, login_user, LoginManager, login_required, current_user, logout_user
 from forms import AddBugForm, RegisterForm, LoginForm, CommentForm, StatusForm,\
     ProjectAssignForm, ProjectUnassignedForm, RoleAssign, EditUser
 from graphs import CreatePriorityBar, CreatePie, CreateTimeBar
-from flask_gravatar import Gravatar
 from functools import wraps
 from flask import abort
 from itsdangerous import URLSafeTimedSerializer
+import os
 
 # Initialising app
 
 app = Flask(__name__)
-app.config['SECRET_KEY'] = "super_secret_key"
+app.config['SECRET_KEY'] = os.environ.get("SECRET_KEY")
 Bootstrap(app)
 
 # Initialising addons
@@ -35,7 +34,7 @@ Base = declarative_base()
 
 # Connect to Database
 
-app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///bugtracker.db"
+app.config["SQLALCHEMY_DATABASE_URI"] = os.environ.get("DATABASE_URL", "sqlite:///bugtracker.db")
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 db = SQLAlchemy(app)
 
